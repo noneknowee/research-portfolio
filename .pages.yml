@@ -1,0 +1,132 @@
+media:
+  input: public/uploads
+  output: /uploads
+
+content:
+  - name: site-settings
+    label: 网站与首页设置
+    type: file
+    path: src/content/settings/site.json
+    format: json
+    fields:
+      - { name: name, label: 姓名或网站名, type: string, required: true }
+      - { name: siteTitle, label: 浏览器标题, type: string, required: true }
+      - { name: description, label: 网站描述, type: text, required: true }
+      - { name: email, label: 联系邮箱, type: string, required: true }
+      - { name: location, label: 所在地, type: string }
+      - name: links
+        label: 社交链接
+        type: object
+        fields:
+          - { name: github, label: GitHub, type: string }
+          - { name: linkedin, label: LinkedIn, type: string }
+      - name: homepage
+        label: 首页
+        type: object
+        fields:
+          - { name: headlineBefore, label: 主标题第一行, type: string, required: true }
+          - { name: headlineEmphasis, label: 主标题强调文字, type: string, required: true }
+          - { name: headlineAfter, label: 主标题结尾, type: string, required: true }
+          - { name: intro, label: 首页介绍, type: text, required: true }
+          - { name: focusAreas, label: 当前关注领域, type: string, list: true }
+          - { name: primaryCta, label: 主按钮文字, type: string }
+          - { name: secondaryCta, label: 订阅按钮文字, type: string }
+          - { name: methodLabel, label: 研究方法标签, type: string }
+          - { name: methodHeadlineLine1, label: 研究方法标题第一行, type: string }
+          - { name: methodHeadlineLine2, label: 研究方法标题第二行, type: string }
+          - name: methodSteps
+            label: 研究方法步骤
+            type: object
+            list: true
+            fields:
+              - { name: title, label: 标题, type: string }
+              - { name: description, label: 说明, type: text }
+          - { name: subscribeHeadlineLine1, label: 订阅标题第一行, type: string }
+          - { name: subscribeHeadlineLine2, label: 订阅标题第二行, type: string }
+          - { name: subscribeDescription, label: 订阅说明, type: text }
+      - { name: footerStatement, label: 页脚文字, type: string }
+
+  - name: about-page
+    label: 关于页面
+    type: file
+    path: src/content/pages/about.md
+    fields:
+      - { name: title, label: 页面标题, type: string, required: true }
+      - { name: description, label: 页面描述, type: text, required: true }
+      - { name: sectionLabel, label: 小标题, type: string }
+      - { name: headlineLine1, label: 主标题第一行, type: string }
+      - { name: headlineLine2, label: 主标题第二行, type: string }
+      - { name: lead, label: 个人简介, type: text, required: true }
+      - name: principles
+        label: 研究原则
+        type: object
+        list: true
+        fields:
+          - { name: label, label: 标签, type: string }
+          - { name: statement, label: 说明, type: text }
+      - { name: contactLabel, label: 联系按钮文字, type: string }
+      - name: body
+        label: 正文
+        type: rich-text
+        options:
+          input: public/uploads/images
+          output: /uploads/images
+
+  - name: articles
+    label: 文章与作品
+    type: collection
+    path: src/content/articles
+    filename:
+      template: "{title}.md"
+      field: create
+    view:
+      primary: title
+      fields: [status, category, publishedAt, featured]
+      sort: [publishedAt, title]
+      search: [title, description, tags, challenge]
+      default:
+        sort: publishedAt
+        order: desc
+    fields:
+      - { name: title, label: 标题, type: string, required: true }
+      - { name: description, label: 摘要, type: text, required: true }
+      - { name: publishedAt, label: 发布日期, type: date, required: true }
+      - { name: updatedAt, label: 修订日期, type: date }
+      - name: category
+        label: 分类
+        type: select
+        required: true
+        options:
+          values: [估值研究, 策略研究, 论文研读, 会计准则, 书本研读]
+      - { name: tags, label: 标签, type: string, list: true }
+      - name: status
+        label: 发布状态
+        type: select
+        required: true
+        options:
+          values:
+            - { value: draft, label: 草稿 }
+            - { value: published, label: 已发布 }
+      - { name: featured, label: 标记为精选, type: boolean }
+      - { name: readingMinutes, label: 预计阅读分钟, type: number }
+      - { name: challenge, label: 本文试图挑战的观点, type: text }
+      - name: coverImage
+        label: 封面图片
+        type: image
+        options:
+          input: public/uploads/images/articles
+          output: /uploads/images/articles
+      - { name: coverAlt, label: 封面图片说明, type: string }
+      - name: attachment
+        label: PDF 或其他附件
+        type: file
+        options:
+          input: public/uploads/documents/articles
+          output: /uploads/documents/articles
+      - name: body
+        label: 正文
+        type: rich-text
+        required: true
+        options:
+          input: public/uploads/images/articles
+          output: /uploads/images/articles

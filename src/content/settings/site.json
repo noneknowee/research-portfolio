@@ -1,0 +1,41 @@
+{
+  "name": "你的名字",
+  "siteTitle": "研究、反证与可执行的判断",
+  "description": "关于估值驱动、行业轮换、数理论文、会计准则与阅读的个人研究档案。",
+  "email": "hello@example.com",
+  "location": "Hong Kong",
+  "links": {
+    "github": "https://github.com/",
+    "linkedin": "https://www.linkedin.com/"
+  },
+  "homepage": {
+    "headlineBefore": "把观点拆成",
+    "headlineEmphasis": "可以被反驳",
+    "headlineAfter": "的结构。",
+    "intro": "研究估值驱动、行业轮换与财务语言。记录判断形成之前的证据，也记录什么会让判断失效。",
+    "focusAreas": ["估值研究", "策略研究", "论文研读"],
+    "primaryCta": "浏览研究",
+    "secondaryCta": "订阅更新",
+    "methodLabel": "我的工作方式",
+    "methodHeadlineLine1": "结论不是终点。",
+    "methodHeadlineLine2": "可追踪的推理过程才是作品。",
+    "methodSteps": [
+      {
+        "title": "拆 Driver",
+        "description": "先把叙事拆成变量、时间尺度和敏感性，不让一个漂亮故事替代模型。"
+      },
+      {
+        "title": "找反例",
+        "description": "主动寻找最可能推翻判断的事实，把“我不同意”变成可以验证的问题。"
+      },
+      {
+        "title": "留修订记录",
+        "description": "观点变化时保留触发原因，让研究展示学习能力，而不是伪装成始终正确。"
+      }
+    ],
+    "subscribeHeadlineLine1": "新文章进入你的收件箱，",
+    "subscribeHeadlineLine2": "不是进入另一条信息流。",
+    "subscribeDescription": "估值、策略、论文与阅读笔记。没有每日摘要，没有虚构的紧迫感。"
+  },
+  "footerStatement": "持续修正，而不是持续确信。"
+}

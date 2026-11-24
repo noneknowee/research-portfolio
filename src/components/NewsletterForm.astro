@@ -1,0 +1,49 @@
+---
+import { ArrowRight } from '@lucide/astro';
+const action = import.meta.env.PUBLIC_NEWSLETTER_ACTION || '';
+---
+
+<form
+  class="newsletter-form"
+  action={action || undefined}
+  method="post"
+  target={action ? '_blank' : undefined}
+  data-newsletter-form
+  novalidate
+>
+  <label for="newsletter-email">你的 Email</label>
+  <div class="newsletter-form__row">
+    <input id="newsletter-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required />
+    <button type="submit">
+      订阅新文章 <ArrowRight size={18} stroke-width={1.8} />
+    </button>
+  </div>
+  <p class="newsletter-form__status" data-newsletter-status aria-live="polite">
+    低频更新，只发送新文章和重要修订。可随时取消订阅。
+  </p>
+</form>
+
+<script define:vars={{ configured: Boolean(action) }}>
+  const form = document.querySelector('[data-newsletter-form]');
+  const status = document.querySelector('[data-newsletter-status]');
+  if (form instanceof HTMLFormElement && status instanceof HTMLElement) {
+    form.addEventListener('submit', (event) => {
+      const input = form.querySelector('input[type="email"]');
+      if (!(input instanceof HTMLInputElement) || !input.validity.valid) {
+        event.preventDefault();
+        status.textContent = '请填写有效的 Email 地址。';
+        status.dataset.state = 'error';
+        input?.focus();
+        return;
+      }
+      if (!configured) {
+        event.preventDefault();
+        status.textContent = '订阅服务尚未连接。部署前请在环境变量中配置邮件服务表单地址。';
+        status.dataset.state = 'error';
+      } else {
+        status.textContent = '正在打开订阅确认页…';
+        status.dataset.state = 'success';
+      }
+    });
+  }
+</script>

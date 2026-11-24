@@ -1,0 +1,20 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+.env
+.agents/
+.codex/
+
+# Impeccable runtime output; shared config remains tracked.
+**/.impeccable/config.local.json
+**/.impeccable/hook.cache.json
+**/.impeccable/hook.pending.json
+**/.impeccable/*.png
+**/.impeccable/review/
+**/.impeccable/questions/
+**/.impeccable/live/server.json
+**/.impeccable/live/sessions/
+**/.impeccable/live/previews/
+**/.impeccable/live/annotations/
+**/.impeccable/live/cache/

@@ -1,0 +1,53 @@
+---
+import { ArrowDown, ArrowRight } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SignalField from '../components/SignalField.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+import { siteConfig, withBase } from '../config';
+---
+
+<BaseLayout>
+  <section class="hero">
+    <SignalField />
+    <div class="hero__content">
+      <p class="hero__name">{siteConfig.name}</p>
+      <h1>{siteConfig.homepage.headlineBefore}<br /><em>{siteConfig.homepage.headlineEmphasis}</em>{siteConfig.homepage.headlineAfter}</h1>
+      <p class="hero__intro">{siteConfig.homepage.intro}</p>
+      <div class="hero__actions">
+        <a class="button button--primary" href={withBase('writing')}>{siteConfig.homepage.primaryCta} <ArrowRight size={18} /></a>
+        <a class="button button--quiet" href="#subscribe">{siteConfig.homepage.secondaryCta}</a>
+      </div>
+    </div>
+    <div class="hero__status" aria-label="研究领域">
+      <span>当前关注</span>
+      <strong>{siteConfig.homepage.focusAreas.join(' / ')}</strong>
+    </div>
+    <a class="hero__scroll" href="#method" aria-label="向下浏览研究方法">
+      <ArrowDown size={18} />
+    </a>
+  </section>
+
+  <section class="method-section" id="method">
+    <div class="method-statement">
+      <p>{siteConfig.homepage.methodLabel}</p>
+      <h2>{siteConfig.homepage.methodHeadlineLine1}<br />{siteConfig.homepage.methodHeadlineLine2}</h2>
+    </div>
+    <div class="method-grid">
+      {siteConfig.homepage.methodSteps.map((step, index) => (
+        <div>
+          <span>{String(index + 1).padStart(2, '0')}</span>
+          <h3>{step.title}</h3>
+          <p>{step.description}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="subscribe-section" id="subscribe">
+    <div>
+      <h2>{siteConfig.homepage.subscribeHeadlineLine1}<br />{siteConfig.homepage.subscribeHeadlineLine2}</h2>
+      <p>{siteConfig.homepage.subscribeDescription}</p>
+    </div>
+    <NewsletterForm />
+  </section>
+</BaseLayout>

@@ -1,0 +1,43 @@
+---
+import '@fontsource-variable/instrument-sans';
+import '@fontsource-variable/newsreader';
+import '@fontsource-variable/noto-sans-sc';
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { siteConfig, withBase } from '../config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  theme?: 'dark' | 'paper';
+}
+
+const {
+  title = siteConfig.title,
+  description = siteConfig.description,
+  theme = 'dark',
+} = Astro.props;
+const pageTitle = title === siteConfig.title ? `${siteConfig.name} — ${title}` : `${title} — ${siteConfig.name}`;
+---
+
+<!doctype html>
+<html lang="zh-CN" data-theme={theme}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content={theme === 'paper' ? '#f2efe7' : '#090b0c'} />
+    <link rel="icon" href={withBase('favicon.svg')} type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} RSS`} href={withBase('rss.xml')} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到正文</a>
+    <SiteHeader theme={theme} />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter theme={theme} />
+  </body>
+</html>

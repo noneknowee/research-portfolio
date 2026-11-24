@@ -1,0 +1,81 @@
+---
+import { Search } from '@lucide/astro';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleRow from '../../components/ArticleRow.astro';
+
+const articles = (await getCollection('articles'))
+  .filter((article) => article.data.status === 'published' || import.meta.env.DEV)
+  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+const categories = ['全部', ...new Set(articles.map((article) => article.data.category))];
+---
+
+<BaseLayout title="文章" description="估值、策略、论文、会计准则与书本研读文章索引。">
+  <section class="archive-hero">
+    <h1>文章与研究记录</h1>
+    <p>按主题浏览，也可以直接搜索一个概念、公司、模型或反例。</p>
+  </section>
+
+  <section class="archive" data-archive>
+    <div class="archive-tools">
+      <div class="search-field">
+        <Search size={18} aria-hidden="true" />
+        <label class="sr-only" for="article-search">搜索文章</label>
+        <input id="article-search" type="search" placeholder="搜索标题、标签或观点…" data-search-input />
+      </div>
+      <div class="category-filters" aria-label="文章分类">
+        {categories.map((category, index) => (
+          <button type="button" data-category-filter={category} aria-pressed={index === 0 ? 'true' : 'false'}>
+            {category}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <p class="archive-count" data-archive-count>显示 {articles.length} 篇</p>
+    <div class="article-list">
+      {articles.map((article, index) => <ArticleRow article={article} index={index} />)}
+    </div>
+    <div class="archive-empty" data-archive-empty hidden={articles.length !== 0}>
+      <h2>{articles.length === 0 ? '作品正在整理' : '没有匹配的文章'}</h2>
+      <p>{articles.length === 0 ? '等真实文章准备好后，这里会按主题发布。' : '换一个关键词，或清除分类筛选。'}</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const archive = document.querySelector('[data-archive]');
+  if (archive instanceof HTMLElement) {
+    const input = archive.querySelector('[data-search-input]');
+    const rows = [...archive.querySelectorAll('[data-article-row]')];
+    const filters = [...archive.querySelectorAll('[data-category-filter]')];
+    const count = archive.querySelector('[data-archive-count]');
+    const empty = archive.querySelector('[data-archive-empty]');
+    let activeCategory = '全部';
+
+    function update() {
+      const query = input instanceof HTMLInputElement ? input.value.trim().toLowerCase() : '';
+      let visible = 0;
+      rows.forEach((row) => {
+        if (!(row instanceof HTMLElement)) return;
+        const categoryMatch = activeCategory === '全部' || row.dataset.category === activeCategory;
+        const textMatch = !query || row.dataset.search?.includes(query);
+        const show = categoryMatch && textMatch;
+        row.hidden = !show;
+        if (show) visible += 1;
+      });
+      if (count) count.textContent = `显示 ${visible} 篇`;
+      if (empty instanceof HTMLElement) empty.hidden = visible !== 0;
+    }
+
+    input?.addEventListener('input', update);
+    filters.forEach((filter) => {
+      filter.addEventListener('click', () => {
+        if (!(filter instanceof HTMLButtonElement)) return;
+        activeCategory = filter.dataset.categoryFilter || '全部';
+        filters.forEach((item) => item.setAttribute('aria-pressed', String(item === filter)));
+        update();
+      });
+    });
+  }
+</script>

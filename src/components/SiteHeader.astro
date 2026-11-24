@@ -1,0 +1,24 @@
+---
+import { ArrowUpRight } from '@lucide/astro';
+import { siteConfig, withBase } from '../config';
+
+interface Props { theme?: 'dark' | 'paper' }
+const { theme = 'dark' } = Astro.props;
+const pathname = Astro.url.pathname;
+const writingPath = withBase('writing');
+const aboutPath = withBase('about');
+---
+
+<header class:list={['site-header', { 'site-header--paper': theme === 'paper' }]}>
+  <a class="wordmark" href={withBase()} aria-label={`${siteConfig.name} 首页`}>
+    <span class="wordmark__signal" aria-hidden="true"></span>
+    <span>{siteConfig.name}</span>
+  </a>
+  <nav aria-label="主要导航">
+    <a class:list={[{ active: pathname.startsWith(writingPath) }]} href={writingPath}>文章</a>
+    <a class:list={[{ active: pathname.startsWith(aboutPath) }]} href={aboutPath}>关于</a>
+    <a class="nav-contact" href={`mailto:${siteConfig.email}`}>
+      联系 <ArrowUpRight size={15} stroke-width={1.8} />
+    </a>
+  </nav>
+</header>

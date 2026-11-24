@@ -1,0 +1,40 @@
+---
+import { ArrowUpRight } from '@lucide/astro';
+import type { CollectionEntry } from 'astro:content';
+import { withBase } from '../config';
+
+interface Props {
+  article: CollectionEntry<'articles'>;
+  index?: number;
+}
+
+const { article, index } = Astro.props;
+const { title, description, category, tags, publishedAt, readingMinutes, challenge, status } = article.data;
+const date = publishedAt.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+---
+
+<article
+  class="article-row"
+  data-article-row
+  data-category={category}
+  data-search={`${title} ${description} ${category} ${tags.join(' ')} ${challenge || ''}`.toLowerCase()}
+>
+  <a href={withBase(`writing/${article.id}`)} aria-label={`阅读：${title}`}>
+    <div class="article-row__meta">
+      {typeof index === 'number' && <span class="article-index">{String(index + 1).padStart(2, '0')}</span>}
+      <span>{category}</span>
+      <time datetime={publishedAt.toISOString()}>{date}</time>
+      {readingMinutes && <span>{readingMinutes} 分钟</span>}
+      {status === 'draft' && <span class="draft-label">示例草稿</span>}
+    </div>
+    <div class="article-row__body">
+      <h2>{title}</h2>
+      <p>{description}</p>
+      {challenge && <p class="article-row__challenge"><strong>质疑：</strong>{challenge}</p>}
+      <div class="tag-list" aria-label="文章标签">
+        {tags.map((tag) => <span>{tag}</span>)}
+      </div>
+    </div>
+    <ArrowUpRight class="article-row__arrow" size={24} stroke-width={1.5} />
+  </a>
+</article>

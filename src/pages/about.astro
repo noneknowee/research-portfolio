@@ -1,0 +1,31 @@
+---
+import { ArrowUpRight } from '@lucide/astro';
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config';
+
+const about = await getEntry('pages', 'about');
+if (!about) throw new Error('Missing about page content.');
+const { Content } = await render(about);
+---
+
+<BaseLayout title={about.data.title} description={about.data.description} theme="paper">
+  <section class="about-page">
+    <div class="about-page__intro">
+      <p>{about.data.sectionLabel}</p>
+      <h1>{about.data.headlineLine1}<br />{about.data.headlineLine2}</h1>
+    </div>
+    <div class="about-page__body">
+      <p class="about-lead">{about.data.lead}</p>
+      <div class="about-rich-text"><Content /></div>
+      <div class="about-principles">
+        {about.data.principles.map((principle) => (
+          <div><span>{principle.label}</span><strong>{principle.statement}</strong></div>
+        ))}
+      </div>
+      <a class="button button--ink" href={`mailto:${siteConfig.email}`}>
+        {about.data.contactLabel} <ArrowUpRight size={18} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>
